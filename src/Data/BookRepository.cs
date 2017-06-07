@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using GenFu;
 using System.Linq;
 
-interface IBookRepository
+public interface IBookRepository
 {
     IEnumerable<Author> AllAuthors();
     IEnumerable<Book> AllBooks();
