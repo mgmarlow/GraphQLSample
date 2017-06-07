@@ -2,6 +2,8 @@
 using GraphQL.Http;
 using GraphQL.Types;
 using GraphQLSample.Models.GraphQLQueries;
+using GraphQLSample.Repository;
+using GraphQLSample.Services;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -14,12 +16,12 @@ namespace GraphQLSample.Middleware
     public class GraphQLMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IBookRepository _bookRepository;
+        private readonly IBookService _bookService;
 
-        public GraphQLMiddleware(RequestDelegate next, IBookRepository bookRepo)
+        public GraphQLMiddleware(RequestDelegate next, IBookService bookService)
         {
             _next = next;
-            _bookRepository = bookRepo;
+            _bookService = bookService;
         }
 
         public async Task Invoke(HttpContext context)
@@ -32,7 +34,7 @@ namespace GraphQLSample.Middleware
                     var query = await sr.ReadToEndAsync();
                     if (!string.IsNullOrWhiteSpace(query))
                     {
-                        var schema = new Schema { Query = new BooksQuery(_bookRepository) };
+                        var schema = new Schema { Query = new BooksQuery(_bookService) };
 
                         var result = await new DocumentExecuter()
                             .ExecuteAsync(o =>

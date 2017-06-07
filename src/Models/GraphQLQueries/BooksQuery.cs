@@ -1,5 +1,6 @@
 ﻿using GraphQL.Types;
 using GraphQLSample.Models.GraphQLTypes;
+using GraphQLSample.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace GraphQLSample.Models.GraphQLQueries
 {
     public class BooksQuery : ObjectGraphType
     {
-        public BooksQuery(IBookRepository bookRepo)
+        public BooksQuery(IBookService bookService)
         {
             Field<BookType>("book",
                 arguments: new QueryArguments(
@@ -18,10 +19,10 @@ namespace GraphQLSample.Models.GraphQLQueries
                 resolve: context =>
                 {
                     var isbn = context.GetArgument<string>("isbn");
-                    return bookRepo.BookByIsbn(isbn);
+                    return bookService.BookByIsbn(isbn);
                 });
 
-            Field<ListGraphType<BookType>>("books", resolve: context => bookRepo.AllBooks());
+            Field<ListGraphType<BookType>>("books", resolve: context => bookService.AllBooks());
         }
     }
 }

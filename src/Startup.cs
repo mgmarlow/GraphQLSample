@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using GraphQLSample.Middleware;
+using GraphQLSample.Repository;
+using GraphQLSample.Services;
 
 namespace GraphQLSample
 {
@@ -32,6 +34,7 @@ namespace GraphQLSample
             services.AddMvc();
 
             services.AddSingleton<IBookRepository, BookRepository>();
+            services.AddSingleton<IBookService, BookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +43,7 @@ namespace GraphQLSample
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseGraphQL();
+            //app.UseGraphQL();
             app.UseMvc();
         }
     }
